@@ -20,6 +20,7 @@ from tensorflow.python.keras.callbacks import LearningRateScheduler
 import copy
 
 def load_data_fc(path,window):
+  # loads and pre-processes the data for architecture A1
   df = pd.read_csv(path)
   # transform the data
   test_size=0.2
@@ -54,6 +55,7 @@ def load_data_fc(path,window):
   return train_x,test_x,test_y,feature_no
 
 def load_data(path,window):
+  # loads and pre-processes the data for architecture A2 and A5
   df = pd.read_csv(path)
   # transform the data
   test_size=0.2
@@ -85,6 +87,7 @@ def load_data(path,window):
   return train_x,test_x,test_y,feature_no
 
 def load_data_a4(path,window):
+  # loads and pre-processes the data for architecture A4
   data = pd.read_csv(path)
   feature_no = data.shape[1]
   # transform the data
@@ -124,6 +127,7 @@ def load_data_a4(path,window):
   return train_x,test_x,test_y,feature_no, train_x_red, test_x_red, test_y_red
 
 def plot_history(history):
+  # plots accuracy and loss curves
   val_acc = history["val_acc"]
   train_acc = history["acc"]
   epoch  = range(0,len(val_acc))
@@ -144,6 +148,7 @@ def plot_history(history):
   plt.show()
 
 def error_fc (test_y,test_x,model):
+    # creates an error table and calculates the best F1 score for architecture A1
     test_y = test_y.reshape(56962)
     test_x_pred = model.predict(test_x)
     mse = np.mean(np.power(test_x - test_x_pred, 2), axis=1)
@@ -157,6 +162,7 @@ def error_fc (test_y,test_x,model):
     return max_F1_index,max_F1,precision, recall, threshold,error_df
 
 def error (test_y,test_x,model):
+    # creates an error table and calculates the best F1 score for architecture A2 and A5
     test_x_pred = model.predict(test_x)
     test_x = test_x.reshape(test_x.shape[0]*test_x.shape[1],30)
     test_y = test_y.reshape(test_y.shape[0]*test_y.shape[1])
@@ -172,6 +178,7 @@ def error (test_y,test_x,model):
     return max_F1_index,max_F1,precision, recall, threshold,error_df
 
 def error_a4 (test_y,test_x,model,window,test_x_red):
+  # creates an error table and calculates the best F1 score for architecture A4
   test_x_pred = model.predict(test_x)
   # removing the last transaction in each window since they are set to 0
   test_x_pred = test_x_pred[:,0:window-1,:]
@@ -191,6 +198,7 @@ def error_a4 (test_y,test_x,model,window,test_x_red):
   return max_F1_index,max_F1,precision, recall, threshold,error_df
 
 def MSE_scatter(max_F1_index,error_df,threshold):
+    # plots the MSE scatter plot
     threshold_fixed = threshold[max_F1_index]
     groups = error_df.groupby('True_class')
     fig, ax = plt.subplots()
@@ -206,6 +214,7 @@ def MSE_scatter(max_F1_index,error_df,threshold):
     return threshold_fixed
 
 def conf_matrix(threshold_fixed, error_df):
+    # plots the confusion matrix corresponding to the best F1 score
     LABELS = ["Normal","Fraud"]
     pred_y = [1 if e > threshold_fixed else 0 for e in error_df.MSE.values]
     conf_matrix = confusion_matrix(error_df.True_class, pred_y)
@@ -217,6 +226,7 @@ def conf_matrix(threshold_fixed, error_df):
     plt.show()
     
 def print_results(max_F1,max_F1_index, recall, precision,error_df):
+    # prints evaluation matrices
     print("Best F1 score:",max_F1)
     print("Recall at best F1 score:",recall[max_F1_index])
     print("Precision at best F1 score:",precision[max_F1_index])
