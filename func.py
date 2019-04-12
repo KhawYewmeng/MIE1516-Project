@@ -55,7 +55,7 @@ def load_data_fc(path,window):
   return train_x,test_x,test_y,feature_no
 
 def load_data(path,window):
-  # loads and pre-processes the data for architecture A2 and A5
+  # loads and pre-processes the data for architectures A2 and A5
   df = pd.read_csv(path)
   # transform the data
   test_size=0.2
@@ -162,7 +162,7 @@ def error_fc (test_y,test_x,model):
     return max_F1_index,max_F1,precision, recall, threshold,error_df
 
 def error (test_y,test_x,model):
-    # creates an error table and calculates the best F1 score for architecture A2 and A5
+    # creates an error table and calculates the best F1 score for architectures A2 and A5
     test_x_pred = model.predict(test_x)
     test_x = test_x.reshape(test_x.shape[0]*test_x.shape[1],30)
     test_y = test_y.reshape(test_y.shape[0]*test_y.shape[1])
