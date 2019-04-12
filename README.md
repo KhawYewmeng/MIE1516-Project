@@ -1,2 +1,3 @@
 # MIE1516-Project
-The data can be download $$3 + 5/2*2$$
+The project report is contained in Credit Card Fraud Detection notebook. The functinos used are defined in func.py.
+The credit card transaction dataset can be downloaded from https://www.kaggle.com/mlg-ulb/creditcardfraud/data
